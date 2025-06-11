@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Pergunta Divertida</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 100px;
+    }
+
+    #botoes {
+      margin-top: 30px;
+      position: relative;
+      height: 200px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 18px;
+      position: absolute;
+      transition: top 0.3s, left 0.3s;
+    }
+
+    #sim {
+      left: 40%;
+      top: 80px;
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    #nao {
+      background-color: #f44336;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Você quer ser meu amigo?</h1>
+
+  <div id="botoes">
+    <button id="sim" onclick="responder('sim')">Sim</button>
+    <button id="nao" onmouseover="moverBotao()">Não</button>
+  </div>
+
+  <script>
+    function responder(resposta) {
+      alert("Você respondeu: " + resposta);
+    }
+
+    function moverBotao() {
+      const botao = document.getElementById("nao");
+      const container = document.getElementById("botoes");
+
+      const maxWidth = container.clientWidth - botao.offsetWidth;
+      const maxHeight = container.clientHeight - botao.offsetHeight;
+
+      const novoLeft = Math.random() * maxWidth;
+      const novoTop = Math.random() * maxHeight;
+
+      botao.style.left = `${novoLeft}px`;
+      botao.style.top = `${novoTop}px`;
+    }
+  </script>
+
+</body>
+</html>
