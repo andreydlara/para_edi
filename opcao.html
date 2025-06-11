@@ -39,6 +39,7 @@
       cursor: pointer;
       transition: top 0.3s, left 0.3s, background-color 0.3s ease;
       position: absolute;
+      user-select: none;
     }
 
     #sim {
@@ -53,10 +54,11 @@
     }
 
     #nao {
-      left: 60%;      /* posição inicial adicionada */
-      top: 80px;      /* posição inicial adicionada */
+      left: 60%;
+      top: 80px;
       background-color: #ff66cc;
       color: white;
+      touch-action: manipulation; /* melhora a resposta em touch */
     }
 
     #nao:hover {
@@ -86,13 +88,16 @@
 
   <div id="botoes">
     <button id="sim" onclick="responder('sim')">Sim</button>
-    <button id="nao" onmouseover="moverBotao()" onclick="moverBotao()">Não</button>
+    <button id="nao">Não</button>
   </div>
 
   <!-- Biblioteca de confete -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   
   <script>
+    const botao = document.getElementById("nao");
+    const container = document.getElementById("botoes");
+
     function responder(resposta) {
       if (resposta === 'sim') {
         confetti({
@@ -109,18 +114,45 @@
     }
 
     function moverBotao() {
-      const botao = document.getElementById("nao");
-      const container = document.getElementById("botoes");
-
       const maxWidth = container.clientWidth - botao.offsetWidth;
       const maxHeight = container.clientHeight - botao.offsetHeight;
 
-      const novoLeft = Math.random() * maxWidth;
-      const novoTop = Math.random() * maxHeight;
+      let novoLeft = Math.random() * maxWidth;
+      let novoTop = Math.random() * maxHeight;
 
       botao.style.left = `${novoLeft}px`;
       botao.style.top = `${novoTop}px`;
     }
+
+    // Evento para fugir quando o mouse se aproxima (desktop)
+    container.addEventListener("mousemove", (e) => {
+      const rect = botao.getBoundingClientRect();
+      const mouseX = e.clientX;
+      const mouseY = e.clientY;
+
+      const botaoCenterX = rect.left + rect.width / 2;
+      const botaoCenterY = rect.top + rect.height / 2;
+
+      const distanciaX = mouseX - botaoCenterX;
+      const distanciaY = mouseY - botaoCenterY;
+      const distancia = Math.sqrt(distanciaX * distanciaX + distanciaY * distanciaY);
+
+      const distanciaMinima = 100; // distância mínima para "fugir"
+
+      if (distancia < distanciaMinima) {
+        moverBotao();
+      }
+    });
+
+    // Evento para fugir ao clicar (touch/celular)
+    botao.addEventListener("click", (e) => {
+      e.preventDefault(); // previne o clique de "pegar" o botão
+      moverBotao();
+    });
+
+    // Para garantir que o botão começa em posição inicial
+    moverBotao();
+
   </script>
 
 </body>
