@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<title>FELIZ DIA DOS NAMORADOS MEU AMOR</title>
+<style>
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #1a1a1a;
+      color: white;
+      text-align: center;
+      overflow-x: hidden;
+      position: relative;
+      height: 100vh;
+      padding-bottom: 50px; /* espaço para o contador fixo */
+    }
+ 
+    h1 {
+      font-size: 3em;
+      color: #ff66cc;
+      margin: 40px 20px 10px;
+      position: relative;
+      z-index: 10;
+    }
+ 
+    p.mensagem {
+      font-size: 1.3em;
+      margin-bottom: 30px;
+      position: relative;
+      z-index: 10;
+    }
+ 
+    .buttons-container {
+      margin: 20px 0 40px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 10;
+    }
+ 
+    button {
+      background-color: #ff66cc;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-size: 1.1em;
+      padding: 12px 25px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+ 
+    button:hover {
+      background-color: #ff33aa;
+    }
+ 
+    button a {
+      color: white;
+      text-decoration: none;
+    }
+ 
+    .fotos-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin: 30px 10px;
+      position: relative;
+      z-index: 10;
+    }
+ 
+    .foto {
+      flex: 1 1 45%;
+      max-width: 300px;
+      margin-bottom: 20px;
+    }
+ 
+    .foto img {
+      width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+ 
+    .foto img:hover {
+      transform: scale(1.05);
+    }
+ 
+    .foto-texto {
+      font-size: 1.2em;
+      margin-top: 10px;
+    }
+ 
+    /* Emojis corações animados */
+    .emoji-heart {
+      position: fixed;
+      font-size: 24px;
+      animation: floatHeart linear infinite;
+      user-select: none;
+      pointer-events: none;
+      opacity: 0.8;
+      z-index: 5;
+    }
+
+    .frase-rotativa {
+      font-family: Arial, sans-serif;
+      font-size: 1.4em;
+      color: #ff66cc;
+      margin: 20px 10px;
+      animation: fadeIn 1s ease-in-out;
+      min-height: 2em;
+      position: relative;
+      z-index: 10;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+ 
+    @keyframes floatHeart {
+      0% {
+        transform: translateY(100vh) translateX(0) scale(1);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-10vh) translateX(30px) scale(1.5);
+        opacity: 0;
+      }
+    }
+
+    /* Contador fixo no rodapé */
+    #contador {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      color: #ff66cc;
+      font-size: 1.2em;
+      padding: 10px 0;
+      text-align: center;
+      z-index: 1000;
+      font-weight: bold;
+    }
+ 
+    /* Responsivo */
+    @media (max-width: 600px) {
+      .foto {
+        flex: 1 1 40%;
+        max-width: 140px;
+      }
+ 
+      h1 {
+        font-size: 2em;
+      }
+ 
+      p.mensagem {
+        font-size: 1em;
+      }
+ 
+      .buttons-container {
+        flex-direction: column;
+        gap: 15px;
+      }
+    }
+</style>
+</head>
+<body>
+<h1>FELIZ DIA DOS NAMORADOS MEU AMOR</h1>
+<div id="fraseRotativa" class="frase-rotativa">Te amo ao infinito e além ♾️🚀❤️</div>
+<div class="buttons-container">
+<button><a href="https://www.exemplo.com" target="_blank" rel="noopener noreferrer">Não clique aqui</a></button>
+</div>
+ 
+<div class="fotos-container">
+  <div class="foto">
+    <img src="foto1.jpeg" alt="EU TE AMO" onclick="burstHearts(event)" />
+    <div class="foto-texto">EU TE AMO</div>
+  </div>
+  <div class="foto">
+    <img src="foto2.jpeg" alt="DEMAIS" onclick="burstHearts(event)" />
+    <div class="foto-texto">DEMAIS</div>
+  </div>
+  <div class="foto">
+    <img src="foto3.jpeg" alt="MAIS QUE TUDO" onclick="burstHearts(event)" />
+    <div class="foto-texto">MAIS QUE TUDO</div>
+  </div>
+  <div class="foto">
+    <img src="foto4.jpeg" alt="MINHA VIDA" onclick="burstHearts(event)" />
+    <div class="foto-texto">MINHA VIDA</div>
+  </div>
+  <div class="foto">
+    <img src="foto5.jpeg" alt="FELIZ 8º DIA DOS NAMORADOS JUNTOS" onclick="burstHearts(event)" />
+    <div class="foto-texto">FELIZ 8º DIA DOS NAMORADOS JUNTOS</div>
+  </div>
+</div>
+
+<div id="contador"></div>
+
+<script>
+    // Corações de emoji flutuantes espalhados pela tela
+    const heartEmojis = ['❤️', '💖', '💘', '💕', '💗', '💓', '💞', '❣️', '💝'];
+
+    function createEmojiHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('emoji-heart');
+      heart.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.animationDuration = (Math.random() * 10 + 5) + 's';
+      heart.style.animationDelay = (Math.random() * 10) + 's';
+      document.body.appendChild(heart);
+      setTimeout(() => {
+        heart.remove();
+      }, (parseFloat(heart.style.animationDuration) + parseFloat(heart.style.animationDelay)) * 1000);
+    }
+
+    // Cria vários emojis inicialmente e depois cria periodicamente
+    for(let i=0; i<30; i++) {
+      setTimeout(createEmojiHeart, i * 300);
+    }
+    setInterval(createEmojiHeart, 1500);
+
+    // Burst hearts no clique nas fotos
+    function burstHearts(event) {
+      for (let i = 0; i < 10; i++) {
+        let heart = document.createElement("div");
+        heart.className = "click-heart";
+        heart.style.left = (event.clientX + Math.random() * 40 - 20) + "px";
+        heart.style.top = (event.clientY + Math.random() * 40 - 20) + "px";
+        heart.style.animation = "burst 1s ease-out forwards";
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 1000);
+      }
+    }
+
+    // Corações click-heart estilo e animação
+    const style = document.createElement('style');
+    style.innerHTML = `
+      .click-heart {
+        position: fixed;
+        width: 20px;
+        height: 20px;
+        background: url('https://i.imgur.com/Qp1B7Y2.png') no-repeat center center;
+        background-size: contain;
+        pointer-events: none;
+      }
+      @keyframes burst {
+        0% {
+          transform: scale(0.5);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(2);
+          opacity: 0;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+</script>
+
+<script>
+  function atualizarContador() {
+    const inicio = new Date(2018, 2, 12, 14, 0, 0); // 12 de março de 2018 às 14:00
+    const agora = new Date();
+
+    let anos = agora.getFullYear() - inicio.getFullYear();
+    let meses = agora.getMonth() - inicio.getMonth();
+    let dias = agora.getDate() - inicio.getDate();
+    let horas = agora.getHours() - inicio.getHours();
+    let minutos = agora.getMinutes() - inicio.getMinutes();
+    let segundos = agora.getSeconds() - inicio.getSeconds();
+
+    if (segundos < 0) {
+      segundos += 60;
+      minutos--;
+    }
+
+    if (minutos < 0) {
+      minutos += 60;
+      horas--;
+    }
+
+    if (horas < 0) {
+      horas += 24;
+      dias--;
+    }
+
+    if (dias < 0) {
+      const ultimoMes = new Date(agora.getFullYear(), agora.getMonth(), 0).getDate();
+      dias += ultimoMes;
+      meses--;
+    }
+
+    if (meses < 0) {
+      meses += 12;
+      anos--;
+    }
+
+    const contadorTexto = `${anos} anos, ${meses} meses, ${dias} dias, ${horas}h ${minutos}m ${segundos}s`;
+    document.getElementById('contador').textContent = contadorTexto;
+  }
+
+  setInterval(atualizarContador, 1000);
+  atualizarContador();
+
+  // Frases rotativas
+  const frases = [
+    "Te amo ao infinito e além ♾️🚀❤️",
+    "Você é o melhor que me aconteceu 💖",
+    "Nosso amor cresce a cada dia 🌹",
+    "Para sempre nós dois juntos 💕",
+    "Você é minha metade da laranja 🍊",
+    "Amor verdadeiro e eterno 💞"
+  ];
+  let indiceFrase = 0;
+  setInterval(() => {
+    indiceFrase = (indiceFrase + 1) % frases.length;
+    const fraseElemento = document.getElementById("fraseRotativa");
+    fraseElemento.style.opacity = 0;
+    setTimeout(() => {
+      fraseElemento.textContent = frases[indiceFrase];
+      fraseElemento.style.opacity = 1;
+    }, 600);
+  }, 5000);
+
+</script>
+
+</body>
+</html>
