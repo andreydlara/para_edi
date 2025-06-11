@@ -87,23 +87,25 @@
     <button id="nao" onmouseover="moverBotao()">Não</button>
   </div>
 
+  <!-- Biblioteca de confete -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  
   <script>
     function responder(resposta) {
-      alert("UHUUUUUUUUUUUUUUUUUUUUUUU 💘");
-    }
-
-    function moverBotao() {
-      const botao = document.getElementById("nao");
-      const container = document.getElementById("botoes");
-
-      const maxWidth = container.clientWidth - botao.offsetWidth;
-      const maxHeight = container.clientHeight - botao.offsetHeight;
-
-      const novoLeft = Math.random() * maxWidth;
-      const novoTop = Math.random() * maxHeight;
-
-      botao.style.left = `${novoLeft}px`;
-      botao.style.top = `${novoTop}px`;
+      if (resposta === 'sim') {
+        // Confete disparando em várias direções
+        confetti({
+          particleCount: 150,
+          spread: 100,
+          origin: { y: 0.6 },
+          colors: ['#ff66cc', '#ffffff', '#ff33aa', '#ff99cc']
+        });
+  
+        // Mensagem de amor
+        setTimeout(() => {
+          alert("Sabia que você ia dizer SIM! 💖 Te amo infinitamente!");
+        }, 300);
+      }
     }
   </script>
 
