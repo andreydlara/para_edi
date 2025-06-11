@@ -105,21 +105,20 @@
         setTimeout(() => {
           alert("Enfim chegou o momento mais esperado! 💖");
         }, 300);
-      }
-      
-      function moverBotao() {
-        const botao = document.getElementById("nao");
-        const container = document.getElementById("botoes");
+      }     
+    }
+    function moverBotao() {
+      const botao = document.getElementById("nao");
+      const container = document.getElementById("botoes");
   
-        const maxWidth = container.clientWidth - botao.offsetWidth;
-        const maxHeight = container.clientHeight - botao.offsetHeight;
+      const maxWidth = container.clientWidth - botao.offsetWidth;
+      const maxHeight = container.clientHeight - botao.offsetHeight;
   
-        const novoLeft = Math.random() * maxWidth;
-        const novoTop = Math.random() * maxHeight;
+      const novoLeft = Math.random() * maxWidth;
+      const novoTop = Math.random() * maxHeight;
   
-        botao.style.left = `${novoLeft}px`;
-        botao.style.top = `${novoTop}px`;
-      }
+      botao.style.left = `${novoLeft}px`;
+      botao.style.top = `${novoTop}px`;
     }
   </script>
 
