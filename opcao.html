@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Pergunta</title>
   <style>
     body {
@@ -53,10 +53,10 @@
     }
 
     #nao {
+      left: 60%;      /* posição inicial adicionada */
+      top: 80px;      /* posição inicial adicionada */
       background-color: #ff66cc;
       color: white;
-      top: 80px;
-      left: 10%;
     }
 
     #nao:hover {
@@ -101,23 +101,23 @@
           origin: { y: 0.6 },
           colors: ['#ff66cc', '#ffffff', '#ff33aa', '#ff99cc']
         });
-  
+
         setTimeout(() => {
           alert("Enfim chegou o momento mais esperado! 💖");
         }, 300);
       }
     }
-  
+
     function moverBotao() {
       const botao = document.getElementById("nao");
       const container = document.getElementById("botoes");
-  
+
       const maxWidth = container.clientWidth - botao.offsetWidth;
       const maxHeight = container.clientHeight - botao.offsetHeight;
-  
+
       const novoLeft = Math.random() * maxWidth;
       const novoTop = Math.random() * maxHeight;
-  
+
       botao.style.left = `${novoLeft}px`;
       botao.style.top = `${novoTop}px`;
     }
