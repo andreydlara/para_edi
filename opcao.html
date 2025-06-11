@@ -93,7 +93,6 @@
   <script>
     function responder(resposta) {
       if (resposta === 'sim') {
-        // Confete disparando em várias direções
         confetti({
           particleCount: 150,
           spread: 100,
@@ -101,12 +100,12 @@
           colors: ['#ff66cc', '#ffffff', '#ff33aa', '#ff99cc']
         });
   
-        // Mensagem de amor
         setTimeout(() => {
           alert("Enfim chegou o momento mais esperado! 💖");
         }, 300);
-      }     
+      }
     }
+  
     function moverBotao() {
       const botao = document.getElementById("nao");
       const container = document.getElementById("botoes");
