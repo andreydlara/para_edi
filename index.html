@@ -267,49 +267,31 @@
 </script>
 
 <script>
-  function atualizarContador() {
-    const inicio = new Date(2018, 2, 12, 14, 0, 0); // 12 de março de 2018 às 14:00
-    const agora = new Date();
+      function atualizarContador() {
+      const inicio = new Date(2018, 2, 12, 14, 0, 0); // 12 de março de 2018 às 14:00
+      const agora = new Date();
+      const diffMs = agora - inicio; // Diferença em milissegundos
 
-    let anos = agora.getFullYear() - inicio.getFullYear();
-    let meses = agora.getMonth() - inicio.getMonth();
-    let dias = agora.getDate() - inicio.getDate();
-    let horas = agora.getHours() - inicio.getHours();
-    let minutos = agora.getMinutes() - inicio.getMinutes();
-    let segundos = agora.getSeconds() - inicio.getSeconds();
+      const totalSegundos = Math.floor(diffMs / 1000);
+      const totalMinutos = Math.floor(totalSegundos / 60);
+      const totalHoras = Math.floor(totalMinutos / 60);
+      const totalDias = Math.floor(totalHoras / 24);
+      const totalMeses = Math.floor(totalDias / 30.4375); // média de dias por mês
+      const totalAnos = Math.floor(totalDias / 365.25); // média com anos bissextos
 
-    if (segundos < 0) {
-      segundos += 60;
-      minutos--;
+      const contadorTexto = 
+        `${totalAnos} anos\n` +
+        `${totalMeses} meses\n` +
+        `${totalDias} dias\n` +
+        `${totalHoras} horas\n` +
+        `${totalMinutos} minutos\n` +
+        `${totalSegundos} segundos`;
+
+      document.getElementById('contador').textContent = contadorTexto;
     }
 
-    if (minutos < 0) {
-      minutos += 60;
-      horas--;
-    }
-
-    if (horas < 0) {
-      horas += 24;
-      dias--;
-    }
-
-    if (dias < 0) {
-      const ultimoMes = new Date(agora.getFullYear(), agora.getMonth(), 0).getDate();
-      dias += ultimoMes;
-      meses--;
-    }
-
-    if (meses < 0) {
-      meses += 12;
-      anos--;
-    }
-
-    const contadorTexto = `${anos} anos, ${meses} meses, ${dias} dias, ${horas}h ${minutos}m ${segundos}s`;
-    document.getElementById('contador').textContent = contadorTexto;
-  }
-
-  setInterval(atualizarContador, 1000);
-  atualizarContador();
+    setInterval(atualizarContador, 1000);
+    atualizarContador();
 
   // Frases rotativas
   const frases = [
