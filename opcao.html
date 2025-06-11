@@ -103,8 +103,22 @@
   
         // Mensagem de amor
         setTimeout(() => {
-          alert("Sabia que você ia dizer SIM! 💖 Te amo infinitamente!");
+          alert("Enfim chegou o momento mais esperado! 💖");
         }, 300);
+      }
+      
+      function moverBotao() {
+        const botao = document.getElementById("nao");
+        const container = document.getElementById("botoes");
+  
+        const maxWidth = container.clientWidth - botao.offsetWidth;
+        const maxHeight = container.clientHeight - botao.offsetHeight;
+  
+        const novoLeft = Math.random() * maxWidth;
+        const novoTop = Math.random() * maxHeight;
+  
+        botao.style.left = `${novoLeft}px`;
+        botao.style.top = `${novoTop}px`;
       }
     }
   </script>
