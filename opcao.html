@@ -84,7 +84,7 @@
 </head>
 <body>
 
-  <h1>Esse ano rola um cuzinho? 🤭🙈</h1>
+  <h1>Depois de 8 dias dos namorados será que esse ano rola um cuzinho? 🤭🙈</h1>
 
   <div id="botoes">
     <button id="sim" onclick="responder('sim')">Sim</button>
@@ -108,7 +108,7 @@
       });
 
       setTimeout(() => {
-        alert("Depois de tanta espera enfim um sonho será realizado! 🥳😍");
+        mostrarMensagemPersonalizada("Depois de tanta espera enfim um sonho será realizado! 🥳😍");
       }, 300);
     }
   }
@@ -162,6 +162,24 @@
   });
 
   moverBotao();
+</script>
+
+<!-- Caixa de mensagem personalizada -->
+<div id="mensagem" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%);
+  background-color:#1a1a1a; color:#fff; padding:30px; border-radius:10px; box-shadow:0 0 15px rgba(255,102,204,0.4); z-index:9999;">
+  <p id="textoMensagem" style="font-size:1.2em; margin-bottom:20px;"></p>
+  <button onclick="fecharMensagem()" style="padding:10px 20px; border:none; border-radius:5px; background:#ff66cc; color:#fff; cursor:pointer;">Fechar</button>
+</div>
+
+<script>
+  function mostrarMensagemPersonalizada(texto) {
+    document.getElementById("textoMensagem").textContent = texto;
+    document.getElementById("mensagem").style.display = "block";
+  }
+
+  function fecharMensagem() {
+    document.getElementById("mensagem").style.display = "none";
+  }
 </script>
 
 </body>
