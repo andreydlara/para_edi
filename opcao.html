@@ -95,27 +95,30 @@
   
   <script>
 	  const botaoNao = document.getElementById("nao");
-	  const areaBotoes = document.getElementById("botoes");
-
-	  function moverBotaoAleatoriamente() {
-		const areaWidth = areaBotoes.clientWidth;
-		const areaHeight = areaBotoes.clientHeight;
-		const botaoWidth = botaoNao.offsetWidth;
-		const botaoHeight = botaoNao.offsetHeight;
-
-		const maxLeft = areaWidth - botaoWidth;
-		const maxTop = areaHeight - botaoHeight;
-
-		const novoLeft = Math.random() * maxLeft;
-		const novoTop = Math.random() * maxTop;
-
-		botaoNao.style.left = `${novoLeft}px`;
-		botaoNao.style.top = `${novoTop}px`;
+	
+	  function moverBotaoPelaTela() {
+	    const larguraTela = window.innerWidth;
+	    const alturaTela = window.innerHeight;
+	    const larguraBotao = botaoNao.offsetWidth;
+	    const alturaBotao = botaoNao.offsetHeight;
+	
+	    const maxLeft = larguraTela - larguraBotao;
+	    const maxTop = alturaTela - alturaBotao;
+	
+	    const novoLeft = Math.random() * maxLeft;
+	    const novoTop = Math.random() * maxTop;
+	
+	    botaoNao.style.left = `${novoLeft}px`;
+	    botaoNao.style.top = `${novoTop}px`;
 	  }
+	
+	  // Garante que o botão "não" seja posicionado como parte do body
+	  botaoNao.style.position = 'fixed';
+	
+	  // Move o botão a cada 250ms
+	  setInterval(moverBotaoPelaTela, 150);
+	</script>
 
-	  // Move o botão a cada 300 milissegundos
-	  setInterval(moverBotaoAleatoriamente, 300);
-  </script>
 
 
   <div id="mensagem" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%);
