@@ -116,10 +116,34 @@
   function moverBotao() {
     const maxWidth = container.clientWidth - botao.offsetWidth;
     const maxHeight = container.clientHeight - botao.offsetHeight;
-
-    const novoLeft = Math.random() * maxWidth;
-    const novoTop = Math.random() * maxHeight;
-
+  
+    let novoLeft, novoTop;
+    let tentativas = 0;
+  
+    const sim = document.getElementById("sim");
+    const simRect = sim.getBoundingClientRect();
+  
+    do {
+      novoLeft = Math.random() * maxWidth;
+      novoTop = Math.random() * maxHeight;
+  
+      const naoRect = {
+        left: novoLeft,
+        top: novoTop,
+        right: novoLeft + botao.offsetWidth,
+        bottom: novoTop + botao.offsetHeight,
+      };
+  
+      tentativas++;
+    } while (
+      // Evita sobreposição com o botão "Sim"
+      !(naoRect.right < sim.offsetLeft ||
+        naoRect.left > sim.offsetLeft + sim.offsetWidth ||
+        naoRect.bottom < sim.offsetTop ||
+        naoRect.top > sim.offsetTop + sim.offsetHeight) &&
+      tentativas < 100
+    );
+  
     botao.style.left = `${novoLeft}px`;
     botao.style.top = `${novoTop}px`;
   }
@@ -149,6 +173,11 @@
   });
 
   botao.addEventListener("click", (e) => {
+    e.preventDefault();
+    moverBotao();
+  });
+
+  botao.addEventListener("touchstart", (e) => {
     e.preventDefault();
     moverBotao();
   });
