@@ -92,107 +92,31 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-
+  
   <script>
-    const botao = document.getElementById("nao");
-    const sim = document.getElementById("sim");
-    const container = document.getElementById("botoes");
-  
-    function responder(resposta) {
-      if (resposta === 'sim') {
-        confetti({
-          particleCount: 150,
-          spread: 100,
-          origin: { y: 0.6 },
-          colors: ['#ff66cc', '#ffffff', '#ff33aa', '#ff99cc']
-        });
-  
-        setTimeout(() => {
-          mostrarMensagemPersonalizada("Depois de tanta espera enfim um sonho será realizado! 🥳😍");
-        }, 300);
-      }
-    }
-  
-    function moverBotao() {
-      const containerRect = container.getBoundingClientRect();
-      const simRect = sim.getBoundingClientRect();
-      const botaoRect = botao.getBoundingClientRect();
-  
-      const maxWidth = container.clientWidth - botao.offsetWidth;
-      const maxHeight = container.clientHeight - botao.offsetHeight;
-  
-      let novoLeft, novoTop, tentativas = 0;
-  
-      do {
-        novoLeft = Math.random() * maxWidth;
-        novoTop = Math.random() * maxHeight;
-  
-        const naoRect = {
-          left: containerRect.left + novoLeft,
-          top: containerRect.top + novoTop,
-          right: containerRect.left + novoLeft + botao.offsetWidth,
-          bottom: containerRect.top + novoTop + botao.offsetHeight,
-        };
-  
-        tentativas++;
-      } while (
-        // Garante que não colida com o botão "Sim"
-        !(naoRect.right < simRect.left ||
-          naoRect.left > simRect.right ||
-          naoRect.bottom < simRect.top ||
-          naoRect.top > simRect.bottom) &&
-        tentativas < 100
-      );
-  
-      botao.style.left = `${novoLeft}px`;
-      botao.style.top = `${novoTop}px`;
-    }
-  
-    let intervaloFuga;
-  
-    container.addEventListener("mousemove", (e) => {
-      const rect = botao.getBoundingClientRect();
-      const mouseX = e.clientX;
-      const mouseY = e.clientY;
-  
-      const botaoCenterX = rect.left + rect.width / 2;
-      const botaoCenterY = rect.top + rect.height / 2;
-  
-      const distanciaX = mouseX - botaoCenterX;
-      const distanciaY = mouseY - botaoCenterY;
-      const distancia = Math.sqrt(distanciaX ** 2 + distanciaY ** 2);
-  
-      const distanciaMinima = 150;
-  
-      if (distancia < distanciaMinima && !intervaloFuga) {
-        intervaloFuga = setInterval(moverBotao, 80);
-      } else if (distancia >= distanciaMinima && intervaloFuga) {
-        clearInterval(intervaloFuga);
-        intervaloFuga = null;
-      }
-    });
-  
-    botao.addEventListener("click", (e) => {
-      e.preventDefault();
-      moverBotao();
-    });
-  
-    botao.addEventListener("touchstart", (e) => {
-      e.preventDefault();
-      moverBotao();
-    });
-  
-    // Opcional: efeito visual anti-clique
-    botao.addEventListener("mouseenter", () => {
-      botao.style.pointerEvents = "none";
-      setTimeout(() => {
-        botao.style.pointerEvents = "auto";
-      }, 800);
-    });
-  
-    // Espera o carregamento total da página
-    window.addEventListener("load", moverBotao);
+	  const botaoNao = document.getElementById("nao");
+	  const areaBotoes = document.getElementById("botoes");
+
+	  function moverBotaoAleatoriamente() {
+		const areaWidth = areaBotoes.clientWidth;
+		const areaHeight = areaBotoes.clientHeight;
+		const botaoWidth = botaoNao.offsetWidth;
+		const botaoHeight = botaoNao.offsetHeight;
+
+		const maxLeft = areaWidth - botaoWidth;
+		const maxTop = areaHeight - botaoHeight;
+
+		const novoLeft = Math.random() * maxLeft;
+		const novoTop = Math.random() * maxTop;
+
+		botaoNao.style.left = `${novoLeft}px`;
+		botaoNao.style.top = `${novoTop}px`;
+	  }
+
+	  // Move o botão a cada 300 milissegundos
+	  setInterval(moverBotaoAleatoriamente, 300);
   </script>
+
 
   <div id="mensagem" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%);
     background-color:#1a1a1a; color:#fff; padding:30px; border-radius:10px; box-shadow:0 0 15px rgba(255,102,204,0.4); z-index:9999;">
