@@ -95,65 +95,74 @@
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   
   <script>
-    const botao = document.getElementById("nao");
-    const container = document.getElementById("botoes");
+  const botao = document.getElementById("nao");
+  const container = document.getElementById("botoes");
 
-    function responder(resposta) {
-      if (resposta === 'sim') {
-        confetti({
-          particleCount: 150,
-          spread: 100,
-          origin: { y: 0.6 },
-          colors: ['#ff66cc', '#ffffff', '#ff33aa', '#ff99cc']
-        });
+  function responder(resposta) {
+    if (resposta === 'sim') {
+      confetti({
+        particleCount: 150,
+        spread: 100,
+        origin: { y: 0.6 },
+        colors: ['#ff66cc', '#ffffff', '#ff33aa', '#ff99cc']
+      });
 
-        setTimeout(() => {
-          alert("Depois de tanta espera enfim um sonho será realizado! 🥳😍");
-        }, 300);
-      }
+      setTimeout(() => {
+        alert("Depois de tanta espera enfim um sonho será realizado! 🥳😍");
+      }, 300);
     }
+  }
 
-    function moverBotao() {
-      const maxWidth = container.clientWidth - botao.offsetWidth;
-      const maxHeight = container.clientHeight - botao.offsetHeight;
+  function moverBotao() {
+    const maxWidth = container.clientWidth - botao.offsetWidth;
+    const maxHeight = container.clientHeight - botao.offsetHeight;
 
-      let novoLeft = Math.random() * maxWidth;
-      let novoTop = Math.random() * maxHeight;
+    const novoLeft = Math.random() * maxWidth;
+    const novoTop = Math.random() * maxHeight;
 
-      botao.style.left = `${novoLeft}px`;
-      botao.style.top = `${novoTop}px`;
+    botao.style.left = `${novoLeft}px`;
+    botao.style.top = `${novoTop}px`;
+  }
+
+  let intervaloFuga;
+
+  container.addEventListener("mousemove", (e) => {
+    const rect = botao.getBoundingClientRect();
+    const mouseX = e.clientX;
+    const mouseY = e.clientY;
+
+    const botaoCenterX = rect.left + rect.width / 2;
+    const botaoCenterY = rect.top + rect.height / 2;
+
+    const distanciaX = mouseX - botaoCenterX;
+    const distanciaY = mouseY - botaoCenterY;
+    const distancia = Math.sqrt(distanciaX ** 2 + distanciaY ** 2);
+
+    const distanciaMinima = 150;
+
+    if (distancia < distanciaMinima && !intervaloFuga) {
+      intervaloFuga = setInterval(moverBotao, 50);
+    } else if (distancia >= distanciaMinima && intervaloFuga) {
+      clearInterval(intervaloFuga);
+      intervaloFuga = null;
     }
+  });
 
-    // Evento para fugir quando o mouse se aproxima (desktop)
-    container.addEventListener("mousemove", (e) => {
-      const rect = botao.getBoundingClientRect();
-      const mouseX = e.clientX;
-      const mouseY = e.clientY;
-
-      const botaoCenterX = rect.left + rect.width / 2;
-      const botaoCenterY = rect.top + rect.height / 2;
-
-      const distanciaX = mouseX - botaoCenterX;
-      const distanciaY = mouseY - botaoCenterY;
-      const distancia = Math.sqrt(distanciaX * distanciaX + distanciaY * distanciaY);
-
-      const distanciaMinima = 100; // distância mínima para "fugir"
-
-      if (distancia < distanciaMinima) {
-        moverBotao();
-      }
-    });
-
-    // Evento para fugir ao clicar (touch/celular)
-    botao.addEventListener("click", (e) => {
-      e.preventDefault(); // previne o clique de "pegar" o botão
-      moverBotao();
-    });
-
-    // Para garantir que o botão começa em posição inicial
+  botao.addEventListener("click", (e) => {
+    e.preventDefault();
     moverBotao();
+  });
 
-  </script>
+  // Impede cliques com pointer-events se estiver muito perto
+  botao.addEventListener("mouseenter", () => {
+    botao.style.pointerEvents = "none";
+    setTimeout(() => {
+      botao.style.pointerEvents = "auto";
+    }, 1000);
+  });
+
+  moverBotao();
+</script>
 
 </body>
 </html>
