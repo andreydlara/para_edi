@@ -58,7 +58,7 @@
       top: 80px;
       background-color: #ff66cc;
       color: white;
-      touch-action: manipulation; /* melhora a resposta em touch */
+      touch-action: manipulation;
     }
 
     #nao:hover {
@@ -91,125 +91,108 @@
     <button id="nao">Não</button>
   </div>
 
-  <!-- Biblioteca de confete -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-  
+
   <script>
-  const botao = document.getElementById("nao");
-  const container = document.getElementById("botoes");
+    const botao = document.getElementById("nao");
+    const container = document.getElementById("botoes");
 
-  function responder(resposta) {
-    if (resposta === 'sim') {
-      confetti({
-        particleCount: 150,
-        spread: 100,
-        origin: { y: 0.6 },
-        colors: ['#ff66cc', '#ffffff', '#ff33aa', '#ff99cc']
-      });
+    function responder(resposta) {
+      if (resposta === 'sim') {
+        confetti({
+          particleCount: 150,
+          spread: 100,
+          origin: { y: 0.6 },
+          colors: ['#ff66cc', '#ffffff', '#ff33aa', '#ff99cc']
+        });
 
+        setTimeout(() => {
+          mostrarMensagemPersonalizada("Depois de tanta espera enfim um sonho será realizado! 🥳😍");
+        }, 300);
+      }
+    }
+
+    function moverBotao() {
+      const maxWidth = container.clientWidth - botao.offsetWidth;
+      const maxHeight = container.clientHeight - botao.offsetHeight;
+
+      let novoLeft, novoTop;
+      let tentativas = 0;
+
+      const sim = document.getElementById("sim");
+
+      do {
+        novoLeft = Math.random() * maxWidth;
+        novoTop = Math.random() * maxHeight;
+
+        const naoRect = {
+          left: novoLeft,
+          top: novoTop,
+          right: novoLeft + botao.offsetWidth,
+          bottom: novoTop + botao.offsetHeight,
+        };
+
+        const simRect = {
+          left: sim.offsetLeft,
+          top: sim.offsetTop,
+          right: sim.offsetLeft + sim.offsetWidth,
+          bottom: sim.offsetTop + sim.offsetHeight
+        };
+
+        tentativas++;
+      } while (
+        // Evita sobreposição com o botão "Sim"
+        !(naoRect.right < sim.offsetLeft ||
+          naoRect.left > sim.offsetLeft + sim.offsetWidth ||
+          naoRect.bottom < sim.offsetTop ||
+          naoRect.top > sim.offsetTop + sim.offsetHeight) &&
+        tentativas < 100
+      );
+
+      botao.style.left = `${novoLeft}px`;
+      botao.style.top = `${novoTop}px`;
+    }
+
+    // Botão "não" se move sozinho ao abrir a tela
+    setInterval(moverBotao, 600);
+
+    botao.addEventListener("click", (e) => {
+      e.preventDefault();
+      moverBotao();
+    });
+
+    botao.addEventListener("touchstart", (e) => {
+      e.preventDefault();
+      moverBotao();
+    });
+
+    botao.addEventListener("mouseenter", () => {
+      botao.style.pointerEvents = "none";
       setTimeout(() => {
-        mostrarMensagemPersonalizada("Depois de tanta espera enfim um sonho será realizado! 🥳😍");
-      }, 300);
-    }
-  }
+        botao.style.pointerEvents = "auto";
+      }, 1000);
+    });
 
-  function moverBotao() {
-    const maxWidth = container.clientWidth - botao.offsetWidth;
-    const maxHeight = container.clientHeight - botao.offsetHeight;
-  
-    let novoLeft, novoTop;
-    let tentativas = 0;
-  
-    const sim = document.getElementById("sim");
-    const simRect = sim.getBoundingClientRect();
-  
-    do {
-      novoLeft = Math.random() * maxWidth;
-      novoTop = Math.random() * maxHeight;
-  
-      const naoRect = {
-        left: novoLeft,
-        top: novoTop,
-        right: novoLeft + botao.offsetWidth,
-        bottom: novoTop + botao.offsetHeight,
-      };
-  
-      tentativas++;
-    } while (
-      // Evita sobreposição com o botão "Sim"
-      !(naoRect.right < sim.offsetLeft ||
-        naoRect.left > sim.offsetLeft + sim.offsetWidth ||
-        naoRect.bottom < sim.offsetTop ||
-        naoRect.top > sim.offsetTop + sim.offsetHeight) &&
-      tentativas < 100
-    );
-  
-    botao.style.left = `${novoLeft}px`;
-    botao.style.top = `${novoTop}px`;
-  }
-
-  let intervaloFuga;
-
-  container.addEventListener("mousemove", (e) => {
-    const rect = botao.getBoundingClientRect();
-    const mouseX = e.clientX;
-    const mouseY = e.clientY;
-
-    const botaoCenterX = rect.left + rect.width / 2;
-    const botaoCenterY = rect.top + rect.height / 2;
-
-    const distanciaX = mouseX - botaoCenterX;
-    const distanciaY = mouseY - botaoCenterY;
-    const distancia = Math.sqrt(distanciaX ** 2 + distanciaY ** 2);
-
-    const distanciaMinima = 150;
-
-    if (distancia < distanciaMinima && !intervaloFuga) {
-      intervaloFuga = setInterval(moverBotao, 50);
-    } else if (distancia >= distanciaMinima && intervaloFuga) {
-      clearInterval(intervaloFuga);
-      intervaloFuga = null;
-    }
-  });
-
-  botao.addEventListener("click", (e) => {
-    e.preventDefault();
+    // Movimento inicial
     moverBotao();
-  });
+  </script>
 
-  botao.addEventListener("touchstart", (e) => {
-    e.preventDefault();
-    moverBotao();
-  });
+  <div id="mensagem" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%);
+    background-color:#1a1a1a; color:#fff; padding:30px; border-radius:10px; box-shadow:0 0 15px rgba(255,102,204,0.4); z-index:9999;">
+    <p id="textoMensagem" style="font-size:1.2em; margin-bottom:20px;"></p>
+    <button onclick="fecharMensagem()" style="padding:10px 20px; border:none; border-radius:5px; background:#ff66cc; color:#fff; cursor:pointer;">Fechar</button>
+  </div>
 
-  // Impede cliques com pointer-events se estiver muito perto
-  botao.addEventListener("mouseenter", () => {
-    botao.style.pointerEvents = "none";
-    setTimeout(() => {
-      botao.style.pointerEvents = "auto";
-    }, 1000);
-  });
+  <script>
+    function mostrarMensagemPersonalizada(texto) {
+      document.getElementById("textoMensagem").textContent = texto;
+      document.getElementById("mensagem").style.display = "block";
+    }
 
-  moverBotao();
-</script>
-
-<!-- Caixa de mensagem personalizada -->
-<div id="mensagem" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%);
-  background-color:#1a1a1a; color:#fff; padding:30px; border-radius:10px; box-shadow:0 0 15px rgba(255,102,204,0.4); z-index:9999;">
-  <p id="textoMensagem" style="font-size:1.2em; margin-bottom:20px;"></p>
-  <button onclick="fecharMensagem()" style="padding:10px 20px; border:none; border-radius:5px; background:#ff66cc; color:#fff; cursor:pointer;">Fechar</button>
-</div>
-
-<script>
-  function mostrarMensagemPersonalizada(texto) {
-    document.getElementById("textoMensagem").textContent = texto;
-    document.getElementById("mensagem").style.display = "block";
-  }
-
-  function fecharMensagem() {
-    document.getElementById("mensagem").style.display = "none";
-  }
-</script>
+    function fecharMensagem() {
+      document.getElementById("mensagem").style.display = "none";
+    }
+  </script>
 
 </body>
 </html>
