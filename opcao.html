@@ -95,8 +95,9 @@
 
   <script>
     const botao = document.getElementById("nao");
+    const sim = document.getElementById("sim");
     const container = document.getElementById("botoes");
-
+  
     function responder(resposta) {
       if (resposta === 'sim') {
         confetti({
@@ -105,76 +106,92 @@
           origin: { y: 0.6 },
           colors: ['#ff66cc', '#ffffff', '#ff33aa', '#ff99cc']
         });
-
+  
         setTimeout(() => {
           mostrarMensagemPersonalizada("Depois de tanta espera enfim um sonho será realizado! 🥳😍");
         }, 300);
       }
     }
-
+  
     function moverBotao() {
+      const containerRect = container.getBoundingClientRect();
+      const simRect = sim.getBoundingClientRect();
+      const botaoRect = botao.getBoundingClientRect();
+  
       const maxWidth = container.clientWidth - botao.offsetWidth;
       const maxHeight = container.clientHeight - botao.offsetHeight;
-
-      let novoLeft, novoTop;
-      let tentativas = 0;
-
-      const sim = document.getElementById("sim");
-
+  
+      let novoLeft, novoTop, tentativas = 0;
+  
       do {
         novoLeft = Math.random() * maxWidth;
         novoTop = Math.random() * maxHeight;
-
+  
         const naoRect = {
-          left: novoLeft,
-          top: novoTop,
-          right: novoLeft + botao.offsetWidth,
-          bottom: novoTop + botao.offsetHeight,
+          left: containerRect.left + novoLeft,
+          top: containerRect.top + novoTop,
+          right: containerRect.left + novoLeft + botao.offsetWidth,
+          bottom: containerRect.top + novoTop + botao.offsetHeight,
         };
-
-        const simRect = {
-          left: sim.offsetLeft,
-          top: sim.offsetTop,
-          right: sim.offsetLeft + sim.offsetWidth,
-          bottom: sim.offsetTop + sim.offsetHeight
-        };
-
+  
         tentativas++;
       } while (
-        // Evita sobreposição com o botão "Sim"
-        !(naoRect.right < sim.offsetLeft ||
-          naoRect.left > sim.offsetLeft + sim.offsetWidth ||
-          naoRect.bottom < sim.offsetTop ||
-          naoRect.top > sim.offsetTop + sim.offsetHeight) &&
+        // Garante que não colida com o botão "Sim"
+        !(naoRect.right < simRect.left ||
+          naoRect.left > simRect.right ||
+          naoRect.bottom < simRect.top ||
+          naoRect.top > simRect.bottom) &&
         tentativas < 100
       );
-
+  
       botao.style.left = `${novoLeft}px`;
       botao.style.top = `${novoTop}px`;
     }
-
-    // Botão "não" se move sozinho ao abrir a tela
-    setInterval(moverBotao, 600);
-
+  
+    let intervaloFuga;
+  
+    container.addEventListener("mousemove", (e) => {
+      const rect = botao.getBoundingClientRect();
+      const mouseX = e.clientX;
+      const mouseY = e.clientY;
+  
+      const botaoCenterX = rect.left + rect.width / 2;
+      const botaoCenterY = rect.top + rect.height / 2;
+  
+      const distanciaX = mouseX - botaoCenterX;
+      const distanciaY = mouseY - botaoCenterY;
+      const distancia = Math.sqrt(distanciaX ** 2 + distanciaY ** 2);
+  
+      const distanciaMinima = 150;
+  
+      if (distancia < distanciaMinima && !intervaloFuga) {
+        intervaloFuga = setInterval(moverBotao, 80);
+      } else if (distancia >= distanciaMinima && intervaloFuga) {
+        clearInterval(intervaloFuga);
+        intervaloFuga = null;
+      }
+    });
+  
     botao.addEventListener("click", (e) => {
       e.preventDefault();
       moverBotao();
     });
-
+  
     botao.addEventListener("touchstart", (e) => {
       e.preventDefault();
       moverBotao();
     });
-
+  
+    // Opcional: efeito visual anti-clique
     botao.addEventListener("mouseenter", () => {
       botao.style.pointerEvents = "none";
       setTimeout(() => {
         botao.style.pointerEvents = "auto";
-      }, 1000);
+      }, 800);
     });
-
-    // Movimento inicial
-    moverBotao();
+  
+    // Espera o carregamento total da página
+    window.addEventListener("load", moverBotao);
   </script>
 
   <div id="mensagem" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%);
